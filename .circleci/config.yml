@@ -1,0 +1,64 @@
+version: 2.1
+
+orbs:
+  aws-cli: circleci/aws-cli@4.1.2
+
+workflows:
+  workflow:
+    jobs:
+      - show-oidc-working-without-env-variables-set
+      - show-oidc-issue-with-env-variables-set
+      - show-oidc-issue-with-env-variables-set-workaround
+
+jobs:
+  show-oidc-working-without-env-variables-set:
+    docker:
+      - image: cimg/base:2024.01-22.04
+    steps:
+      - checkout
+      - aws-cli/setup:
+          profile_name: configured-profile
+          role_arn: arn:aws:iam::719208690128:role/cci-oidc
+          role_session_name: circleci-${CIRCLE_PROJECT_REPONAME}-oidc
+          region: us-west-2
+      - run:
+          name: Test Profile
+          command: aws sts get-caller-identity --profile configured-profile
+  show-oidc-issue-with-env-variables-set:
+    docker:
+      - image: cimg/base:2024.01-22.04
+        environment:
+          # Imagine these are set in a context, or on the project directly
+          AWS_ACCESS_KEY_ID: "key"
+          AWS_SECRET_ACCESS_KEY: "secret"
+    steps:
+      - checkout
+      - aws-cli/setup:
+          profile_name: configured-profile
+          role_arn: arn:aws:iam::719208690128:role/cci-oidc
+          role_session_name: circleci-${CIRCLE_PROJECT_REPONAME}-oidc
+          region: us-west-2
+      - run:
+          name: Test Profile
+          command: aws sts get-caller-identity --profile configured-profile
+  show-oidc-issue-with-env-variables-set-workaround:
+    docker:
+      - image: cimg/base:2024.01-22.04
+        environment:
+          # Imagine these are set in a context, or on the project directly
+          AWS_ACCESS_KEY_ID: "key"
+          AWS_SECRET_ACCESS_KEY: "secret"
+    steps:
+      - checkout
+      - aws-cli/setup:
+          profile_name: configured-profile
+          role_arn: arn:aws:iam::719208690128:role/cci-oidc
+          role_session_name: circleci-${CIRCLE_PROJECT_REPONAME}-oidc
+          region: us-west-2
+
+          # This is the workaround - set these variables to an env variable that's _not_ set
+          aws_access_key_id: UNSET_ENV_VARIABLE
+          aws_secret_access_key: UNSET_ENV_VARIABLE
+      - run:
+          name: Test Profile
+          command: aws sts get-caller-identity --profile configured-profile
