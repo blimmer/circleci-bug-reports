@@ -18,7 +18,7 @@ jobs:
       - checkout
       - aws-cli/setup:
           profile_name: configured-profile
-          role_arn: arn:aws:iam::719208690128:role/cci-oidc
+          role_arn: arn:aws:iam::291961553751:role/cci-oidc
           role_session_name: circleci-${CIRCLE_PROJECT_REPONAME}-oidc
           region: us-west-2
       - run:
@@ -35,7 +35,7 @@ jobs:
       - checkout
       - aws-cli/setup:
           profile_name: configured-profile
-          role_arn: arn:aws:iam::719208690128:role/cci-oidc
+          role_arn: arn:aws:iam::291961553751:role/cci-oidc
           role_session_name: circleci-${CIRCLE_PROJECT_REPONAME}-oidc
           region: us-west-2
       - run:
@@ -52,7 +52,7 @@ jobs:
       - checkout
       - aws-cli/setup:
           profile_name: configured-profile
-          role_arn: arn:aws:iam::719208690128:role/cci-oidc
+          role_arn: arn:aws:iam::291961553751:role/cci-oidc
           role_session_name: circleci-${CIRCLE_PROJECT_REPONAME}-oidc
           region: us-west-2
 
