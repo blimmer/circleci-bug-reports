@@ -1,0 +1,13 @@
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
+
+jobs:
+  build:
+    machine:
+      image: ubuntu-2204:2024.11.1 # ubuntu-2204:current as of 2024-12-18
+    steps:
+      - checkout
+      - run: yarn add cdktf-cli
